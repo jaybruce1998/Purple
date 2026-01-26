@@ -12,7 +12,7 @@ BrunosRoom,5,0,AgathasRoom,4,0
 CeladonCity,8,13,CeladonMart1F,3,7
 CeladonCity,10,13,CeladonMart1F,17,7
 CeladonCity,24,9,CeladonMansion1F,5,11
-CeladonCity,41,9,CeladonPokecenter,4,7
+CeladonCity,41,9,CeladonPokecenter,3,7
 CeladonCity,12,27,CeladonGym,5,17
 CeladonCity,28,19,GameCorner,16,17
 CeladonCity,39,19,CeladonMart5F,16,1
@@ -22,7 +22,7 @@ CeladonCity,35,27,CeladonChiefHouse,3,7
 CeladonCity,43,27,CeladonHotel,4,7
 CeruleanCity,27,11,CeruleanTrashedHouse,3,7
 CeruleanCity,13,15,CeruleanTradeHouse,3,7
-CeruleanCity,19,17,CeruleanPokecenter,4,7
+CeruleanCity,19,17,CeruleanPokecenter,3,7
 CeruleanCity,30,19,CeruleanGym,5,13
 CeruleanCity,13,25,BikeShop,3,7
 CeruleanCity,25,25,CeruleanMart,4,7
@@ -35,7 +35,7 @@ ChampionsRoom,4,0,HallOfFame,5,7
 CinnabarIsland,6,3,PokemonMansion1F,6,27
 CinnabarIsland,18,3,CinnabarGym,17,17
 CinnabarIsland,6,9,CinnabarLab,3,7
-CinnabarIsland,11,11,CinnabarPokecenter,4,7
+CinnabarIsland,11,11,CinnabarPokecenter,3,7
 CinnabarIsland,15,11,CinnabarMart,4,7
 CinnabarLab,8,4,CinnabarLabTradeRoom,3,7
 CinnabarLab,12,4,CinnabarLabMetronomeRoom,3,7
@@ -43,7 +43,7 @@ CinnabarLab,16,4,CinnabarLabFossilRoom,3,7
 DiglettsCaveRoute2,4,4,DiglettsCave,5,5
 FuchsiaCity,5,13,FuchsiaMart,4,7
 FuchsiaCity,11,27,FuchsiaBillsGrandpasHouse,3,7
-FuchsiaCity,19,27,FuchsiaPokecenter,4,7
+FuchsiaCity,19,27,FuchsiaPokecenter,3,7
 FuchsiaCity,27,27,WardensHouse,5,7
 FuchsiaCity,18,3,SafariZoneGate,4,5
 FuchsiaCity,5,27,FuchsiaGym,5,17
@@ -54,7 +54,7 @@ IndigoPlateauLobby,8,0,LoreleisRoom,5,11
 LancesRoom,24,16,AgathasRoom,5,0
 LancesRoom,5,0,ChampionsRoom,4,7
 LancesRoom,6,0,ChampionsRoom,4,7
-LavenderTown,3,5,LavenderPokecenter,4,7
+LavenderTown,3,5,LavenderPokecenter,3,7
 LavenderTown,14,5,PokemonTower1F,11,17
 LavenderTown,7,9,MrFujisHouse,3,7
 LavenderTown,15,13,LavenderMart,4,7
@@ -70,8 +70,8 @@ PewterCity,16,17,PewterGym,5,13
 PewterCity,29,13,PewterNidoranHouse,3,7
 PewterCity,23,17,PewterMart,4,7
 PewterCity,7,29,PewterSpeechHouse,3,7
-PewterCity,13,25,PewterPokecenter,4,7
-Route10,11,19,RockTunnelPokecenter,4,7
+PewterCity,13,25,PewterPokecenter,3,7
+Route10,11,19,RockTunnelPokecenter,3,7
 Route10,8,17,RockTunnel1F,15,3
 Route10,8,53,RockTunnel1F,15,33
 Route10,6,39,PowerPlant,5,35
@@ -94,7 +94,7 @@ Route5,10,29,Route5Gate,4,0
 Route5,10,33,Route5Gate,4,5
 Route5,17,27,UndergroundPathRoute5,4,7
 Route5,10,21,Daycare,3,7
-Route4,11,5,MtMoonPokecenter,4,7
+Route4,11,5,MtMoonPokecenter,3,7
 Route4,18,5,MtMoon1F,15,35
 Route6,9,1,Route6Gate,4,0
 Route6,10,1,Route6Gate,4,0
@@ -110,11 +110,11 @@ SaffronCity,34,3,SaffronGym,9,17
 SaffronCity,13,11,SaffronPidgeyHouse,3,7
 SaffronCity,25,11,SaffronMart,4,7
 SaffronCity,18,21,SilphCo1F,11,17
-SaffronCity,9,29,SaffronPokecenter,4,7
+SaffronCity,9,29,SaffronPokecenter,3,7
 SaffronCity,29,29,MrPsychicsHouse,3,7
 UndergroundPathRoute7,4,4,UndergroundPathWestEast,2,5
 UndergroundPathRoute5,4,4,UndergroundPathNorthSouth,5,4
-VermilionCity,11,3,VermilionPokecenter,4,7
+VermilionCity,11,3,VermilionPokecenter,3,7
 VermilionCity,9,13,PokemonFanClub,3,7
 VermilionCity,23,13,VermilionMart,4,7
 VermilionCity,12,19,VermilionGym,5,17
@@ -123,7 +123,7 @@ VermilionCity,18,31,VermilionDock,14,2
 VermilionCity,19,31,VermilionDock,14,2
 VermilionCity,15,13,VermilionTradeHouse,3,7
 VermilionCity,7,3,VermilionOldRodHouse,3,7
-ViridianCity,23,25,ViridianPokecenter,4,7
+ViridianCity,23,25,ViridianPokecenter,3,7
 ViridianCity,29,19,ViridianMart,4,7
 ViridianCity,21,9,ViridianNicknameHouse,3,7
 ViridianCity,32,7,ViridianGym,17,17

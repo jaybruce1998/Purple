@@ -176,7 +176,8 @@ Burning Rage	Dragon	Special	250	100	10	spatk UP 12 CHARGE CONFUSE
 Calm Mind	Psychic	Status	-	-	20	spatk UP 1 spdef UP 1
 Rat Gambit	Normal	Physical	200	-	1	atk UP 6 10/100 evasion UP 6
 Desperate Kick	Fighting	Physical	30	100	40	spdef UP 1
-Big Money	Bug	Physical	100	100	5	BURN""".split("\n");
+Big Money	Bug	Physical	100	100	5	BURN
+Sludge Bomb	Poison	Special	90	100	10	30/100 POISON""".split("\n");
 	static Move[] MOVES=new Move[MOVE_STRINGS.length];
 	static Map<String, Move> MOVE_MAP=new HashMap<>();
 	public static void buildMoves()

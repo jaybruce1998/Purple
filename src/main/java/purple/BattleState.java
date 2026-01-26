@@ -57,7 +57,6 @@ public class BattleState
 	}
 	private static int coins(BattleState pState, BattleState oState)
 	{
-		//pState.resetMoves();
 		int coins=pState.coins+oState.coins;
 		if(coins>0)
 			OverworldGui.print("You picked up "+coins+" scattered coins!");
@@ -164,8 +163,8 @@ public class BattleState
 			myMove=STRUGGLE;
 			yourMove=STRUGGLE;
 			for(int i=0; i<ACTIONS.length; i++)
-				OverworldGui.strArr[i]=ACTIONS[i];;
-			switch(guiChoice(3))
+				OverworldGui.strArr[i]=ACTIONS[i];
+			switch(gui.spaceHeld?0:guiChoice(3))
 			{
 				case 0:
 					if(pState.nextMove==null)
@@ -178,7 +177,7 @@ public class BattleState
 						}
 						if(pState.canMove()&&moveDex>=0)
 						{
-							myMove=monsters[monDex].moves[moveDex];
+							myMove=pState.moves[moveDex];
 							monsters[monDex].pp[moveDex]--;
 						}
 					}
@@ -189,7 +188,7 @@ public class BattleState
 						wMoveDex=randomMoveDex(wState);
 						if(wState.canMove()&&wMoveDex>=0)
 						{
-							yourMove=wildMon.moves[wMoveDex];
+							yourMove=wState.moves[wMoveDex];
 							wildMon.pp[wMoveDex]--;
 						}
 					}
@@ -266,7 +265,7 @@ public class BattleState
 							wMoveDex=randomMoveDex(wState);
 							if(wState.canMove()&&wMoveDex>=0)
 							{
-								yourMove=wildMon.moves[wMoveDex];
+								yourMove=wState.moves[wMoveDex];
 								wildMon.pp[wMoveDex]--;
 							}
 						}
@@ -309,7 +308,7 @@ public class BattleState
 							wMoveDex=randomMoveDex(wState);
 							if(wState.canMove()&&wMoveDex>=0)
 							{
-								yourMove=wildMon.moves[wMoveDex];
+								yourMove=wState.moves[wMoveDex];
 								wildMon.pp[wMoveDex]--;
 							}
 						}
@@ -323,7 +322,7 @@ public class BattleState
 					}
 					break;
 				case 3:
-					if(monsters[monDex].spd*32/wildMon.spd+30*++escapeAttempts>Math.random()*256)
+					if(monsters[monDex].spd*128.0/wildMon.spd+30*++escapeAttempts>Math.random()*256)
 					{
 						OverworldGui.print("You got away safely!");
 						return coins(pState, wState);
@@ -336,7 +335,7 @@ public class BattleState
 							wMoveDex=randomMoveDex(wState);
 							if(wState.canMove()&&wMoveDex>=0)
 							{
-								yourMove=wildMon.moves[wMoveDex];
+								yourMove=wState.moves[wMoveDex];
 								wildMon.pp[wMoveDex]--;
 							}
 						}
@@ -397,8 +396,8 @@ public class BattleState
 			myMove=STRUGGLE;
 			yourMove=STRUGGLE;
 			for(int i=0; i<ACTIONS.length; i++)
-				OverworldGui.strArr[i]=ACTIONS[i];;
-			switch(guiChoice(3))
+				OverworldGui.strArr[i]=ACTIONS[i];
+			switch(gui.spaceHeld?0:guiChoice(3))
 			{
 				case 0:
 					if(pState.nextMove==null)
@@ -411,7 +410,7 @@ public class BattleState
 						}
 						if(pState.canMove()&&moveDex>=0)
 						{
-							myMove=monsters[monDex].moves[moveDex];
+							myMove=pState.moves[moveDex];
 							monsters[monDex].pp[moveDex]--;
 						}
 					}
@@ -422,7 +421,7 @@ public class BattleState
 						wMoveDex=randomMoveDex(wState);
 						if(wState.canMove()&&wMoveDex>=0)
 						{
-							yourMove=tMonsters[tMonDex].moves[wMoveDex];
+							yourMove=wState.moves[wMoveDex];
 							tMonsters[tMonDex].pp[wMoveDex]--;
 						}
 					}
@@ -498,7 +497,7 @@ public class BattleState
 							wMoveDex=randomMoveDex(wState);
 							if(wState.canMove()&&wMoveDex>=0)
 							{
-								yourMove=tMonsters[tMonDex].moves[wMoveDex];
+								yourMove=wState.moves[wMoveDex];
 								tMonsters[tMonDex].pp[wMoveDex]--;
 							}
 						}
@@ -539,7 +538,7 @@ public class BattleState
 							wMoveDex=randomMoveDex(wState);
 							if(wState.canMove()&&wMoveDex>=0)
 							{
-								yourMove=tMonsters[tMonDex].moves[wMoveDex];
+								yourMove=wState.moves[wMoveDex];
 								tMonsters[tMonDex].pp[wMoveDex]--;
 							}
 						}
@@ -629,7 +628,6 @@ public class BattleState
 	public BattleState(Battler monster, BattleState b)
 	{
 		this(monster);
-		//b.resetMoves();
 		spdefTurns=b.spdefTurns;
 		defTurns=b.defTurns;
 	}
@@ -954,6 +952,10 @@ public class BattleState
 								damage=b.monster.hp/2;
 								if(damage==0)
 									OverworldGui.print("But dingus, you can't KO a pokemon with Super Fang!");
+								break;
+							case "level":
+								damage=monster.level;
+								OverworldGui.print(monster.nickname+"'s level determined the damage!");
 								break;
 							case null:
 								if(e.up)
@@ -1553,7 +1555,7 @@ public class BattleState
 						} while(m.name.equals(m.name.toUpperCase()));
 						doMove(m, b);
 						break;
-					case "COPY_LAST_OPPONENT_MOVE":
+					case "LAST_OPPONENT_MOVE":
 						if(lastMove==null)
 							OverworldGui.print("But "+monster.nickname+" hasn't seen any attacks used yet!");
 						else
@@ -1631,7 +1633,10 @@ public class BattleState
 						for(int j=0; j<types.length; j++)
 							types[j]=b.types[j];
 						for(int j=0; j<moves.length; j++)
+						{
 							moves[j]=b.moves[j];
+							monster.pp[j]=Math.max(monster.pp[j], 5);
+						}
 						OverworldGui.print(monster.nickname+" transformed into "+b.monster.nickname+"!");
 						break;
 					case "SWITCH":

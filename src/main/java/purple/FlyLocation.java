@@ -93,6 +93,8 @@ public class FlyLocation
 			case "MtMoon":
 			case "RockTunnel":
 				return n;
+			case "IndigoPl":
+				return "IndigoPlateau";
 		}
 		return n+"City";
 	}
@@ -107,9 +109,6 @@ public class FlyLocation
 		{
 			case "RedsHouse1F":
 				name="PalletTown";
-				break;
-			case "IndigoPlateauLobby":
-				name="IndigoPlateau";
 		}
 		FlyLocation f=FLY_LOCATIONS.get(normalize(name));
 		if(f!=null)

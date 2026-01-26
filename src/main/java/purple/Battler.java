@@ -179,7 +179,7 @@ public class Battler extends Monster
 	}
 	public void learn(Move[] lastMoves, Move m)
 	{
-		OverworldGui.canSpace=false;
+		OverworldGui.spaceHeld=false;
 		for(int i=0; i<lastMoves.length; i++)
 			OverworldGui.strArr[i]=lastMoves[i]==null?"":lastMoves[i].name;
 		OverworldGui.print(nickname+" is trying to learn "+m.name+"! Select a move to replace.");
@@ -194,7 +194,6 @@ public class Battler extends Monster
 			pp[v]=Math.min(pp[v], m.pp);
 			OverworldGui.print(" and learned how to use "+m.name+"!");
 		}
-		OverworldGui.canSpace=true;
 	}
 	public boolean newMove(Move m)
 	{

@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 
 import java.io.InputStream;
 import java.util.LinkedHashSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OverworldGui extends JPanel {
     static final int TILE_SIZE = 64;
@@ -26,7 +27,7 @@ public class OverworldGui extends JPanel {
     static final int DISPLAY_H = 11; // how many tiles vertically to draw
 	static final Item FAKE_ID=Item.ITEM_MAP.get("Fake ID");
 	static final Item LIFT_KEY=Item.ITEM_MAP.get("Lift Key");
-	static boolean showingText, battling, choosingFromLongList, usingBattleItem, busedItem, rightClicked, inMenu, buySell, buying, selling, checkingPokes, checkingMoves, checkingTms, teachingMove, depWith, depositing, withdraw, flying, inside, showingDex, rareCandy, pickingStarter, surfing, canSpace=true;
+	static boolean showingText, battling, choosingFromLongList, usingBattleItem, busedItem, rightClicked, inMenu, buySell, buying, selling, checkingPokes, checkingMoves, checkingTms, teachingMove, depWith, depositing, withdraw, flying, inside, showingDex, rareCandy, pickingStarter, surfing, spaceHeld;
 	static String currentText, currentLoc;
 	private static final Deque<String> printQ=new ArrayDeque<>();
     static String mapName = "RedsHouse2F";
@@ -72,7 +73,6 @@ public class OverworldGui extends JPanel {
 	private final JFrame frame;
 	private final BufferedImage[] DANCE_FRAMES=new BufferedImage[10];
 	private final Giver MATT=PokeMap.POKEMAPS.get("Route4").givers[3][63];
-	private boolean spaceHeld;
 	enum Direction {
 		SOUTH(0),
 		NORTH(1),
@@ -322,21 +322,6 @@ public class OverworldGui extends JPanel {
 				else
 					pickingStarter=true;
 			}
-			/*else
-				switch((y-540)/25)
-				{
-					case 0:
-						player.give(new Battler(1, Monster.MONSTER_MAP.get("Bulbasaur")));
-						break;
-					case 1:
-						player.give(new Battler(1, Monster.MONSTER_MAP.get("Charmander")));
-						break;
-					case 2:
-						player.give(new Battler(1, Monster.MONSTER_MAP.get("Squirtle")));
-						break;
-					default:
-						pickingStarter=true;
-				}*/
 		}
 		else if(buySell)
 		{
@@ -604,7 +589,7 @@ public class OverworldGui extends JPanel {
 				return;
 			}
 			FlyLocation f=FlyLocation.FLY_LOCATIONS.get(n);
-			if(f==null)
+			if(f==null||!f.visited)
 				return;
 			loadMap(f.dest);
 			playerX=f.x;
@@ -952,7 +937,8 @@ public class OverworldGui extends JPanel {
 							print(move+"'s PP was permanently increased!");
 							break;
 						default:
-							throw new RuntimeException(usedItem.name+" huh?");
+							System.out.println(usedItem.name+" huh?");
+							closeMenus();
 					}
 					usedItem=null;
 					chosenMon=null;
@@ -979,8 +965,18 @@ public class OverworldGui extends JPanel {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_T, 0, false), "showTms");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0, false), "showMap");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, 0, false), "showDex");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "holdMouse");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "save");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "stopClicking");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, true), "choose0");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_2, 0, true), "choose1");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_3, 0, true), "choose2");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_4, 0, true), "choose3");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_5, 0, true), "choose4");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_6, 0, true), "choose5");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_7, 0, true), "choose6");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_8, 0, true), "choose7");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_9, 0, true), "choose8");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_0, 0, true), "choose9");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), "shiftUp");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), "swapTwo");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "prevBox");
@@ -989,7 +985,6 @@ public class OverworldGui extends JPanel {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "stopWest");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "stopSouth");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "stopEast");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), "stopClicking");
 		//DVORAK
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, 0, false), "moveNorth");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, 0, false), "moveSouth");
@@ -1010,9 +1005,68 @@ public class OverworldGui extends JPanel {
 		actionMap.put("stopSouth", new MoveAction(Direction.SOUTH, false));
 		actionMap.put("stopWest", new MoveAction(Direction.WEST, false));
 		actionMap.put("stopEast", new MoveAction(Direction.EAST, false));
+		actionMap.put("choose0", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=choosingFromLongList?80:540;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose1", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=choosingFromLongList?105:565;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose2", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=choosingFromLongList?130:590;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose3", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=choosingFromLongList?155:615;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose4", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=180;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose5", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=205;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose6", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=230;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose7", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=255;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose8", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=280;
+				clickMouse();
+			}
+		});
+		actionMap.put("choose9", new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent e) {
+				mouseY=305;
+				clickMouse();
+			}
+		});
 		actionMap.put("openInventory", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			@Override public void actionPerformed(ActionEvent e) {
 				if(inMenu)
 				{
 					closeMenus();
@@ -1038,8 +1092,7 @@ public class OverworldGui extends JPanel {
 			}
 		});
 		actionMap.put("showPokemon", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			@Override public void actionPerformed(ActionEvent e) {
 				if(inMenu)
 				{
 					closeMenus();
@@ -1054,8 +1107,7 @@ public class OverworldGui extends JPanel {
 			}
 		});
 		actionMap.put("showTms", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			@Override public void actionPerformed(ActionEvent e) {
 				if(inMenu)
 				{
 					closeMenus();
@@ -1118,16 +1170,10 @@ public class OverworldGui extends JPanel {
 				inMenu=true;
 			}
 		});
-		actionMap.put("holdMouse", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				spaceHeld=canSpace;
-			}
-		});
 		actionMap.put("stopClicking", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				spaceHeld=false;
+				spaceHeld=!spaceHeld;
 			}
 		});
 		actionMap.put("save", new AbstractAction() {
@@ -1562,6 +1608,7 @@ public class OverworldGui extends JPanel {
 	}
 	public void blackout()
 	{
+		Trainer.addEliteFour();
 		loadMap(lastHeal);
 		playerX=lastHeal.healX;
 		playerY=lastHeal.healY;
@@ -1694,7 +1741,8 @@ public class OverworldGui extends JPanel {
     }
 	private int elevate(String s, boolean B, int m)
 	{
-		if(!player.hasItem(LIFT_KEY))
+		pressedKeys.clear();
+		if(B&&!player.hasItem(LIFT_KEY))
 		{
 			print("Weird, nothing is happening.");
 			return 0;
@@ -1839,6 +1887,7 @@ public class OverworldGui extends JPanel {
 						return;
 					}
 				}
+				stepPhase=StepPhase.NONE;
 				loadMap(w.pm);
 				playerX=w.col;
 				playerY=w.row;
@@ -1948,7 +1997,7 @@ public class OverworldGui extends JPanel {
 					else if(g.gave)
 					{
 						if(g.item!=null&&g.item.name.equals("Shiny Charm"))
-							Main.SHINY_CHANCE=128;
+							Main.SHINY_CHANCE=256;
 						pm.givers[nextY][nextX]=null;
 					}
 					offsetX=0;
@@ -2360,17 +2409,14 @@ public class OverworldGui extends JPanel {
 		}
         int camX = Math.round(playerX * TILE_SIZE + offsetX - getWidth() / 2 + TILE_SIZE / 2);
         int camY = Math.round(playerY * TILE_SIZE + offsetY - getHeight() / 2 + TILE_SIZE / 2);
-
         // Draw visible tiles only
         int startX = Math.max(0, camX / TILE_SIZE - 1);
         int startY = Math.max(0, camY / TILE_SIZE - 1);
         int endX = Math.min(currentMap[0].length, startX + DISPLAY_W + 2);
         int endY = Math.min(currentMap.length, startY + DISPLAY_H + 2);
-
         for (int y = startY; y < endY; y++) {
             for (int x = startX; x < endX; x++) {
-                BufferedImage tile = tileImages[currentMap[y][x]];
-                g.drawImage(tile, x * TILE_SIZE - camX, y * TILE_SIZE - camY, null);
+                g.drawImage(tileImages[currentMap[y][x]], x * TILE_SIZE - camX, y * TILE_SIZE - camY, null);
 				Trainer t=pm.trainers[y][x];
 				if(t==null)
 				{
@@ -2478,7 +2524,6 @@ public class OverworldGui extends JPanel {
 		String[] words = text.split(" ");
 		StringBuilder line = new StringBuilder();
 		int lineHeight = fm.getHeight();
-
 		for (String word : words) {
 			String testLine = line + word + " ";
 			if (fm.stringWidth(testLine) > maxWidth) {
@@ -2491,12 +2536,11 @@ public class OverworldGui extends JPanel {
 		}
 		g.drawString(line.toString(), x, y);
 	}
-
+	
     private void drawConnection(Graphics g, int dirIndex, PokeMap conn, int offset, int camX, int camY) {
         int[][] mapGrid = conn.grid;
         int maxY = mapGrid.length;
         int maxX = mapGrid[0].length;
-
         int baseX = 0, baseY = 0;
         switch (dirIndex) {
             case 0 -> { // NORTH
@@ -2516,13 +2560,12 @@ public class OverworldGui extends JPanel {
                 baseY = offset * TILE_SIZE;
             }
         }
-
-        for (int y = 0; y < mapGrid.length; y++) {
-            for (int x = 0; x < mapGrid[0].length; x++) {
-                BufferedImage tile = tileImages[mapGrid[y][x]];
-                g.drawImage(tile, x * TILE_SIZE + baseX - camX, y * TILE_SIZE + baseY - camY, null);
-            }
-        }
+		int px=baseX-camX, py=baseY-camY, sx=px/-64, sy=py/-64, ex=Math.min(sx+12, mapGrid[0].length), ey=Math.min(sy+12, mapGrid.length);
+		sx=Math.max(sx, 0);
+		sy=Math.max(sy, 0);
+		for(int y=sy; y<ey; y++)
+			for(int x=sx; x<ex; x++)
+                g.drawImage(tileImages[mapGrid[y][x]], x * TILE_SIZE + px, y * TILE_SIZE + py, null);
     }
 
     private int getCurrentFrame() {

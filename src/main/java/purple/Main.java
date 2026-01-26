@@ -35,6 +35,8 @@ public class Main
 			Trainer.buildTrainers(p, trainS, leadS, gioRS);
 			WorldObject.buildWorldObjects(p, wobS);
 			OverworldGui.runGUI(p, pInfo);
+			if(p.hasItem(Item.ITEM_MAP.get("Shiny Charm")))
+				SHINY_CHANCE=256;
 		} catch(Exception e) {
 			e.printStackTrace();
 			Trainer.buildTrainers();

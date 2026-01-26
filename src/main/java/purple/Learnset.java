@@ -4,9 +4,9 @@ public class Learnset
 {
 	static String[] LEARNSET_STRINGS="""
 1 Psychic,2 Double-Edge,3 Hypersonic Blast,4 Burning Rage
-- Tackle,- Growl,1 Desperate Kick,7 Leech Seed,13 Vine Whip,20 Poison Powder,27 Razor Leaf,34 Growth,41 Sleep Powder,48 Solar Beam
-- Tackle,- Growl,- Leech Seed,7 Leech Seed,13 Vine Whip,22 Poison Powder,30 Razor Leaf,38 Growth,46 Sleep Powder,54 Solar Beam
-- Tackle,- Growl,- Leech Seed,- Vine Whip,7 Leech Seed,13 Vine Whip,22 Poison Powder,30 Razor Leaf,43 Growth,55 Sleep Powder,65 Solar Beam
+- Tackle,- Growl,1 Desperate Kick,7 Leech Seed,13 Vine Whip,20 Poison Powder,27 Razor Leaf,34 Growth,41 Sleep Powder,48 Solar Beam,49 Sludge Bomb
+- Tackle,- Growl,- Leech Seed,7 Leech Seed,13 Vine Whip,22 Poison Powder,30 Razor Leaf,38 Growth,46 Sleep Powder,54 Solar Beam,55 Sludge Bomb
+- Tackle,- Growl,- Leech Seed,- Vine Whip,7 Leech Seed,13 Vine Whip,22 Poison Powder,30 Razor Leaf,43 Growth,55 Sleep Powder,65 Solar Beam,100 Sludge Bomb
 - Scratch,- Growl,1 Desperate Kick,9 Ember,15 Leer,22 Rage,30 Slash,38 Flamethrower,46 Fire Spin
 - Scratch,- Growl,- Ember,9 Ember,15 Leer,24 Rage,33 Slash,42 Flamethrower,56 Fire Spin
 - Scratch,- Growl,- Ember,- Leer,9 Ember,15 Leer,24 Rage,36 Slash,46 Flamethrower,55 Fire Spin

@@ -95,6 +95,14 @@ ChampionsRoom;BIKER,4,1,DOWN,Champion Noah,20000,101 Pidgeot,102 Alakazam,103 Rh
 RocketHideoutB1F;BLUE,3,3,DOWN,Programmer Jay,999999,190 Abra,130 Magikarp,135 Caterpie,140 Weedle,145 Ditto,165 Voidwalker""".split("\n");
 	static Map<String, BufferedImage> TRAINER_SPRITES=new HashMap<>();
 	static int tid=0;
+	public static void addEliteFour()
+	{
+		for(int i=0; i<E4_TEAM_STRINGS.length; i++)
+		{
+			String[] a=E4_TEAM_STRINGS[i].split(";");
+			PokeMap.POKEMAPS.get(a[0]).addE4Trainer(i*2, a[1], TrainerStrings.E4_SPEECH_STRINGS[i]);
+		}
+	}
 	public static void buildTrainers()
 	{
 		for(String s: TEAM_STRINGS)
@@ -112,11 +120,7 @@ RocketHideoutB1F;BLUE,3,3,DOWN,Programmer Jay,999999,190 Abra,130 Magikarp,135 C
 			String[] a=GIO_RIVAL_TEAM_STRINGS[i].split(";");
 			PokeMap.POKEMAPS.get(a[0]).addGioRival(i, a[1]);
 		}
-		for(int i=0; i<E4_TEAM_STRINGS.length; i++)
-		{
-			String[] a=E4_TEAM_STRINGS[i].split(";");
-			PokeMap.POKEMAPS.get(a[0]).addE4Trainer(i*2, a[1], TrainerStrings.E4_SPEECH_STRINGS[i]);
-		}
+		addEliteFour();
 	}
 	public static void buildTrainers(Player p, String trainS, String leadS, String gioRS)
 	{
