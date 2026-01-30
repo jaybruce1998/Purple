@@ -71,8 +71,8 @@ public class OverworldGui extends JPanel {
 	public final Player player;
 	private int bet=1;
 	private final JFrame frame;
-	private final BufferedImage[] DANCE_FRAMES=new BufferedImage[10];
-	private final Giver MATT=PokeMap.POKEMAPS.get("Route4").givers[3][63];
+	private final BufferedImage[] DANCE_FRAMES=new BufferedImage[10], OAK_FRAMES=new BufferedImage[10], MONSTER_FRAMES[3];
+	private final Giver MATT=PokeMap.POKEMAPS.get("Route4").givers[3][63], OAK=PokeMap.POKEMAPS.get("FuschiaCity").givers[7][13], MONSTER=PokeMap.POKEMAPS.get("FuschiaCity").givers[6][13];
 	enum Direction {
 		SOUTH(0),
 		NORTH(1),
@@ -134,7 +134,12 @@ public class OverworldGui extends JPanel {
 	{
 		try {
 			for(int i=0; i<10; i++)
+			{
 				DANCE_FRAMES[i]=scale(ImageIO.read(OverworldGui.class.getResourceAsStream("/sprites/COOLTRAINER_F/" + i + ".png")));
+				OAK_FRAMES[i]=scale(ImageIO.read(OverworldGui.class.getResourceAsStream("/sprites/OAK/" + i + ".png")));
+			}
+			for(int i=0; i<3; i++)
+				MONSTER_FRAMES[i]=scale(ImageIO.read(OverworldGui.class.getResourceAsStream("/sprites/MONSTER/" + i + ".png")));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -178,7 +183,6 @@ public class OverworldGui extends JPanel {
 				g2d = flipped.createGraphics();
 				g2d.drawImage(scaled, BSIZE, 0, 0, BSIZE, 0, 0, BSIZE, BSIZE, null);  // flip horizontally
 				g2d.dispose();
-				
 				pBattlers[i] = flipped;
 			}
 		} catch (Exception e) {
@@ -194,6 +198,19 @@ public class OverworldGui extends JPanel {
 					clickMouse();
 				if(frames%30==0)
 					MATT.bi=DANCE_FRAMES[(int)(Math.random()*10)];
+				if(MONSTER!=null)
+				{
+					OAK.bi=OAK_FRAMES[(int)(Math.random()*10)];
+					if(frames==24)
+						MONSTER.bi=MONSTER_FRAMES[0];
+					else if(frames==48)
+						MONSTER.bi=MONSTER_FRAMES[2];
+					else
+					{
+						frames%=60;
+						MONSTER.bi=MONSTER_FRAMES[1];
+					}
+				}
 			}
             update();
             repaint();
@@ -896,6 +913,7 @@ public class OverworldGui extends JPanel {
 							inMenu=true;
 							chosenMon=b;
 							longArr=chosenMon.moveStrings();
+							choosingFromLongList=true;
 							return;
 					}
 					usedItem=null;
@@ -1556,7 +1574,7 @@ public class OverworldGui extends JPanel {
 	}
 	private void useRepel(int steps)
 	{
-		repelSteps+=steps;
+		repelSteps=Math.max(repelSteps, 0)+steps;
 		player.use(usedItem);
 		usedItem=null;
 		choosingFromLongList=false;
@@ -1906,6 +1924,7 @@ public class OverworldGui extends JPanel {
 				WorldObject wo=pm.wob[nextY][nextX];
 				if(wo!=null)
 				{
+					pressedKeys.clear();
 					if(wo.stepOn(this))
 						pm.stepOn(player, nextX, nextY);
 					phaseFrame=currentStepFrames;
@@ -1927,7 +1946,6 @@ public class OverworldGui extends JPanel {
 							print("No! I want to bet $"+bet+" if I play, but I'm broke!");
 						else
 						{
-							player.money-=bet;
 							if(BlackjackDialog.play(frame))
 							{
 								player.money+=bet;
@@ -1949,6 +1967,7 @@ public class OverworldGui extends JPanel {
 					martItems=pm.getMartItems(playerX, playerY);
 					if(martItems!=null)
 					{
+						pressedKeys.clear();
 						buySell=true;
 						strArr[0]="Buy";
 						strArr[1]="Sell";
@@ -1977,6 +1996,7 @@ public class OverworldGui extends JPanel {
 				Giver g=pm.givers[nextY][nextX];
 				if(g!=null)
 				{
+					pressedKeys.clear();
 					g.interact(player);
 					if(pm.name.equals("Daycare"))
 					{
@@ -2007,6 +2027,7 @@ public class OverworldGui extends JPanel {
 				WorldObject wo=pm.wob[nextY][nextX];
 				if(wo!=null)
 				{
+					pressedKeys.clear();
 					Boolean b=wo.stepOn(this);
 					if(b==null)
 					{
@@ -2043,7 +2064,6 @@ public class OverworldGui extends JPanel {
 				}
 				if(--repelSteps==0)
 					print("Your repel ran out!");
-				repelSteps=Math.max(0, repelSteps-1);
 				switch(tileTypes[nextY][nextX])
 				{
 					case 1:

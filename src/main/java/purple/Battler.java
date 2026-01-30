@@ -107,12 +107,12 @@ public class Battler extends Monster
 	{
 		super();
 		dexNum=b.dexNum-1;
-		if(dexNum<1||Evolution.EVOLUTIONS[dexNum].evo!=b.dexNum)
+		if(dexNum<1||Evolution.EVOLUTIONS[dexNum]==null)
 			dexNum++;
 		else
 		{
 			dexNum--;
-			if(Evolution.EVOLUTIONS[dexNum].evo!=dexNum+1)
+			if(Evolution.EVOLUTIONS[dexNum]==null)
 				dexNum++;
 		}
 		become(Monster.MONSTERS[dexNum]);

@@ -154,6 +154,9 @@ public class Player
 	public void use(Item item)
 	{
 		if(--item.quantity<=0)
+		{
 			items.remove(item);
+			seenItems.remove(item);
+		}
 	}
 }

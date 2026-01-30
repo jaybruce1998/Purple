@@ -142,6 +142,11 @@ Zinc,9800""".split("\n");
 		wild=i.wild;
 		world=i.world;
 	}
+	public boolean equals(Object o)
+	{
+		Item i=(Item)o;
+		return name.equals(i.name);
+	}
 	public String toString()
 	{
 		return name+" x"+quantity;

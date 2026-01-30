@@ -27,8 +27,7 @@ Route16Gate1F;GUARD 4 9 RIGHT,Bicycle
 SilphCo11F;ROCKET 6 13 DOWN,Card Key
 SilphCo11F;ROCKET 7 13 DOWN,Card Key
 CinnabarIsland;BOULDER 18 4 DOWN,Secret Key
-RocketHideoutB1F;GIRL 3 23 UP,Key to Darkness
-""".split("\n");
+RocketHideoutB1F;GIRL 3 23 UP,Key to Darkness""".split("\n");
 	static String[] BADGE_BLOCKER_STRINGS="""
 Route4;FISHER 18 6 DOWN,null;0
 CeruleanCity;GUARD 27 12 DOWN,null;1
@@ -43,7 +42,8 @@ Route23;GUARD 8 119 DOWN,null;2
 Route23;GUARD 9 119 DOWN,null;2
 Route23;GUARD 8 136 DOWN,null;1
 CinnabarIsland;GAMBLER_ASLEEP 6 4 DOWN,null;5
-CeruleanCity;SUPER_NERD 4 12 DOWN,null;8""".split("\n");
+CeruleanCity;SUPER_NERD 4 12 DOWN,null;8
+FuchsiaCity;OAK 13 7 DOWN,null;8""".split("\n");
 	static String[] BOULDER_STRINGS="""
 SeafoamIslands1F;BOULDER 18 10 DOWN,Move=Strength;BOULDER 26 7 DOWN,Move=Strength
 SeafoamIslandsB1F;BOULDER 17 6 DOWN,Move=Strength;BOULDER 22 6 DOWN,Move=Strength
@@ -99,7 +99,8 @@ This way is closed to you.;You're cleared for passage!
 There's nothing I love more than a man in uniform!;Where's your uniform?
 Nice try, but not today.;Respect - you've earned this path!
 This is my house, do you like it?;Okay I'll admit it, I don't live here. Please help me.
-I sometimes hear strange sounds from deep inside.;Huh, you think you're pretty tough, don't you? Yeah, me too...""".split("\n");
+I sometimes hear strange sounds from deep inside.;Huh, you think you're pretty tough, don't you? Yeah, me too...
+AHHHHHHHHHHHH!!!!;Oh, it's gone? I guess I am, too, then!""".split("\n");
 	public static void buildBlockers()
 	{
 		for(int i=0; i<BLOCKER_STRINGS.length; i++)

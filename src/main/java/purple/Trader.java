@@ -21,10 +21,8 @@ CeladonMansion1F;MONSTER 0 5 RIGHT
 CeladonMansion1F;MONSTER 4 4 UP
 CeruleanCity;MONSTER 28 26 DOWN
 CopycatsHouse2F;MONSTER 5 1 DOWN
-FuchsiaCity;MONSTER 12 6 RIGHT
 FuchsiaCity;MONSTER 30 12 RIGHT
 LavenderCuboneHouse;MONSTER 3 5 UP
-MrFujisHouse;MONSTER 6 4 UP
 MrFujisHouse;MONSTER 1 3 DOWN
 PewterNidoranHouse;MONSTER 4 5 LEFT
 SSAnneB1FRooms;MONSTER 21 2 DOWN
@@ -35,7 +33,6 @@ CopycatsHouse1F;FAIRY 1 4 UP
 CopycatsHouse2F;FAIRY 1 6 RIGHT
 FuchsiaCity;FAIRY 31 5 DOWN
 PewterPokecenter;FAIRY 1 3 DOWN
-PokemonFanClub;FAIRY 6 4 LEFT
 SSAnne1FRooms;FAIRY 13 4 DOWN""".split("\n");
 	static String[] BIRD_STRINGS="""
 CopycatsHouse2F;BIRD 4 6 RIGHT
@@ -335,7 +332,6 @@ Oh no, you've got a crush on me, don't you? I'm only gonna break your heart!
 NO!
 Tales of a far-away region have blessed my ears... Johto! I'd love to visit some day.
 I've been living here for days now, I wonder if anybody's noticed.
-Oh, did you want to get through here? Yeah, you'd like that, wouldn't you?
 Huh, just a piece of paper? Useless.
 You're from Pallet Town? I love visting there!
 I might be young, but I know a strong trainer when I see one! I'll tell you if any pass by.
@@ -368,13 +364,16 @@ Route2TradeHouse;SCIENTIST 2 4 RIGHT,null;Kabutops,Omanyte
 Route2TradeHouse;GAMEBOY_KID 4 1 DOWN,null;Omastar,Kabuto
 VermilionTradeHouse;LITTLE_GIRL 3 5 UP,null;Graveler,Gengar
 VermilionPidgeyHouse;YOUNGSTER 5 3 LEFT,null;Haunter,Alakazam
-SilphCo5F;SILPH_WORKER_M 13 9 DOWN,Potion;null,Lapras
-SilphCo10F;SILPH_WORKER_F 9 15 DOWN,null;Venusaur,Squirtle
-SaffronMart;SUPER_NERD 4 2 DOWN,null;Blastoise,Charmander
+SilphCo5F;SILPH_WORKER_M 13 9 DOWN,Gold Teeth;null,Lapras
+SilphCo10F;SILPH_WORKER_F 9 15 DOWN,null;Venusaur,Charmander
+SaffronMart;SUPER_NERD 4 2 DOWN,null;Blastoise,Bulbasaur
+VermilionPokecenter;LINK_RECEPTIONIST 11 2 UP,null;Charizard,Squirtle
 SSAnne3F;SAILOR 9 3 RIGHT,null;Chansey,Farfetch'd
 Route20;SWIMMER 68 11 UP,null;Tauros,Mr. Mime
 PokemonTower2F;CHANNELER 3 7 RIGHT,null;Porygon,Lickitung
-Route3;SUPER_NERD 57 11 DOWN,null;Moltres,Jynx""".split("\n");
+Route3;SUPER_NERD 57 11 DOWN,null;Moltres,Jynx
+MrFujisHouse;MONSTER 6 4 UP,null;Articuno,Hitmonchan
+PokemonFanClub;FAIRY 6 4 LEFT,null;Zapdos,Hitmonlee""".split("\n");
 	public static void buildTraders()
 	{
 		for(String s: DEX_STRINGS)
