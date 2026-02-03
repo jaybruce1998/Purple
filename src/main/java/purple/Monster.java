@@ -4,7 +4,7 @@ import java.util.*;
 public class Monster
 {
 	static String[] MONSTER_STRINGS="""
-Missingno,Dragon/Psychic,300,300,300,300,300,300
+Missingno.,Dragon/Psychic,300,300,300,300,300,300
 Bulbasaur,Grass/Poison,45,49,49,65,65,45
 Ivysaur,Grass/Poison,60,62,63,80,80,60
 Venusaur,Grass/Poison,80,82,83,100,100,80

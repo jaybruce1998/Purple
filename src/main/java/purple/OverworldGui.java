@@ -1249,7 +1249,15 @@ public class OverworldGui extends JPanel {
 		});
 		actionMap.put("save", new AbstractAction() {
 			@Override public void actionPerformed(ActionEvent e) {
-				if (inMenu||battling||showingText||choosingFromLongList||buySell)
+				if(showingText)
+				{
+					if(printQ.isEmpty())
+						showingText = false;
+					else
+						currentText=printQ.pop();
+					return;
+				}
+				if(inMenu||battling||choosingFromLongList||buySell)
 					return;
 				switch(pm.name)
 				{
@@ -1304,16 +1312,18 @@ public class OverworldGui extends JPanel {
 					if(n<2)
 						return;
 					Move m=b.moves[0];
-					int pp=b.pp[0];
+					int pp=b.pp[0], mpp=b.mpp[0];
 					String s=longArr[13];
 					for(int i=1; i<n; i++)
 					{
 						b.moves[i-1]=b.moves[i];
 						b.pp[i-1]=b.pp[i];
+						b.mpp[i-1]=b.mpp[i];
 						longArr[i+12]=longArr[i+13];
 					}
 					b.moves[--n]=m;
 					b.pp[n]=pp;
+					b.mpp[n]=mpp;
 					longArr[n+13]=s;
 				}
 				else if(checkingTms)
@@ -1921,7 +1931,15 @@ public class OverworldGui extends JPanel {
 		boolean isBump = currentStepFrames == BUMP_STEP_FRAMES;
 		int nextX = playerX + dx, nextY = playerY + dy;
 		if (isBump) {
-			if(tileTypes[playerY][playerX]==2||tileTypes[playerY][playerX]==18)//NS door, EW door
+			boolean b=nextX>=0&&nextX<currentMap[0].length&&nextY>=0&&nextY<currentMap.length;
+			if(b&&(pm.grid[nextY][nextX]==582||pm.grid[nextY][nextX]==583))
+			{
+				pressedKeys.clear();
+				heldDirection=null;
+				phaseFrame=currentStepFrames;
+				print("Honestly, this one doesn't really look like "+player.team[0].nickname+", although it says it's supposed to be... "+Monster.MONSTERS[(int)(Math.random()*100)+1].name+"?");
+			}
+			else if(tileTypes[playerY][playerX]==2||tileTypes[playerY][playerX]==18)//NS door, EW door
 			{
 				Warp w=pm.getWarp(playerY, playerX);
 				if(w==null)
@@ -1954,9 +1972,10 @@ public class OverworldGui extends JPanel {
 				FlyLocation.visit(pm.name);
 				print("Your team was fully healed!");
 			}
-			else if(nextX>=0&&nextX<currentMap[0].length&&nextY>=0&&nextY<currentMap.length)
+			else if(b)
 			{
 				WorldObject wo=pm.wob[nextY][nextX];
+				Giver g=pm.givers[nextY][nextX];
 				if(wo!=null)
 				{
 					pressedKeys.clear();
@@ -1965,15 +1984,14 @@ public class OverworldGui extends JPanel {
 						pm.stepOn(player, nextX, nextY);
 					phaseFrame=currentStepFrames;
 				}
-				else if(pm.grid[nextY][nextX]==220)
+				else if(g!=null)
 				{
-					inMenu=true;
-					depWith=true;
-					strArr[0]="Deposit";
-					strArr[1]="Withdraw";
+					pressedKeys.clear();
+					heldDirection=null;
+					g.interact(player);
 					phaseFrame=currentStepFrames;
 				}
-				else if(pm.name.equals("GameCorner")&&pm.grid[playerY][playerX]==122)
+				else if(pm.grid[playerY][playerX]==122&&pm.name.equals("GameCorner"))
 				{
 					phaseFrame=currentStepFrames;
 					if(player.hasItem(FAKE_ID))
@@ -1998,30 +2016,248 @@ public class OverworldGui extends JPanel {
 					else
 						print("Crap, it wants me to scan an ID!!");
 				}
-				else if(pm.grid[nextY][nextX]==143)
-				{
-					phaseFrame=currentStepFrames;
-					heldDirection=Direction.EAST;
-					print("Hey baby, come sit on my lap!");
-					print("(Eek, I'd better get out of here!)");
-				}
 				else
-				{
-					martItems=pm.getMartItems(playerX, playerY);
-					if(martItems!=null)
+					switch(pm.grid[nextY][nextX])
 					{
-						pressedKeys.clear();
-						heldDirection=null;
-						buySell=true;
-						strArr[0]="Buy";
-						strArr[1]="Sell";
-						phaseFrame=currentStepFrames;
-						print("Welcome to the mart!");
+						case 35:
+						case 220:
+						case 388:
+						case 420:
+							inMenu=true;
+							depWith=true;
+							strArr[0]="Deposit";
+							strArr[1]="Withdraw";
+							phaseFrame=currentStepFrames;
+							break;
+						case 143:
+							phaseFrame=currentStepFrames;
+							heldDirection=Direction.EAST;
+							print("Hey baby, come sit on my lap!");
+							print("(Eek, I'd better get out of here!)");
+							break;
+						case 164:
+						case 165:
+							phaseFrame=currentStepFrames;
+							print("No time to sleep, I've got pokemon to catch!");
+							break;
+						case 195:
+						case 379:
+							phaseFrame=currentStepFrames;
+							print("Whoa, I don't think I'm old enough to look at this...");
+							break;
+						case 196:
+						case 390:
+							phaseFrame=currentStepFrames;
+							print("Crud, he hit me with Rat Gambit again! I suck at this game.");
+							break;
+						case 51:
+						case 52:
+						case 65:
+						case 66:
+						case 139:
+						case 141:
+						case 326:
+						case 329:
+						case 534:
+						case 535:
+							phaseFrame=currentStepFrames;
+							print("No "+player.name+", you told yourself you'd stop eating plants!");
+							break;
+						case 3:
+						case 4:
+						case 56:
+						case 57:
+						case 317:
+						case 328:
+						case 435:
+						case 438:
+						case 496:
+						case 668:
+							phaseFrame=currentStepFrames;
+							print("Hot dog, that looks just like "+player.team[0].nickname+"!");
+							break;
+						case 189:
+						case 190:
+						case 192:
+						case 193:
+						case 279:
+						case 280:
+						case 281:
+						case 282:
+						case 284:
+						case 285:
+							phaseFrame=currentStepFrames;
+							print("Gah, I can never find what I need! May as well speak to a worker...");
+							break;
+						case 2:
+							phaseFrame=currentStepFrames;
+							print("Here lies... huh? I wish I could read!");
+							break;
+						case 42:
+						case 378:
+							phaseFrame=currentStepFrames;
+							print("Golly gee, I could stand here all day looking at this view!");
+							break;
+						case 44:
+						case 45:
+						case 61:
+						case 161:
+						case 350:
+							phaseFrame=currentStepFrames;
+							print("Books, huh? Boooring!");
+							break;
+						case 9:
+						case 13:
+						case 14:
+							phaseFrame=currentStepFrames;
+							print("Whoa, this one's a beauty! But I'll never afford it.");
+							break;
+						case 20:
+							phaseFrame=currentStepFrames;
+							print("Aw great, now my hands are covered in oil! I hate getting lubed up.");
+							break;
+						case 36:
+							phaseFrame=currentStepFrames;
+							print("How the heck do I work this crazy thing?!");
+							break;
+						case 31:
+							phaseFrame=currentStepFrames;
+							print("Nope, DEFINITELY not going in there!");
+							break;
+						case 41:
+							phaseFrame=currentStepFrames;
+							print("Gasp! Who would hang this in their house?!");
+							break;
+						case 62:
+							phaseFrame=currentStepFrames;
+							print("A trophy for comedy! How pathetic.");
+							break;
+						case 177:
+						case 178:
+							phaseFrame=currentStepFrames;
+							heldDirection=Direction.SOUTH;
+							print("NO, I HATE SCHOOL!");
+							break;
+						case 179:
+						case 180:
+							phaseFrame=currentStepFrames;
+							heldDirection=null;
+							print("Nope, "+player.name+" is NOT a nerd!");
+							break;
+						case 185:
+						case 188:
+						case 333:
+							phaseFrame=currentStepFrames;
+							print("Hehehe look at all those squiggles... I wonder what they mean!");
+							break;
+						case 194:
+							phaseFrame=currentStepFrames;
+							print("Limited time sale on EVERYTHING?! I'd better act quick!");
+							break;
+						case 226:
+						case 614:
+						case 633:
+							phaseFrame=currentStepFrames;
+							print("It'd probably be rude to drink this... slurp!");
+							break;
+						case 302:
+						case 303:
+							phaseFrame=currentStepFrames;
+							print("Well, I suppose a nibble couldn't hurt... CRUNCH!");
+							break;
+						case 314:
+							phaseFrame=currentStepFrames;
+							print("Wait, is there somebody INSIDE there? I'd better keep my distance...");
+							break;
+						case 347:
+							phaseFrame=currentStepFrames;
+							print("Blah blah words blah, LAME!");
+							break;
+						case 391:
+							phaseFrame=currentStepFrames;
+							print("A bachelor's degree in... computer science? Well that's worthless!");
+							break;
+						case 206:
+							phaseFrame=currentStepFrames;
+							print("Are those... pokeballs? Maybe I should just snatch one... eh, seems risky!");
+							break;
+						case 455:
+							phaseFrame=currentStepFrames;
+							print("This must be what the region looked like thousands of years ago, neat!");
+							break;
+						case 464:
+							phaseFrame=currentStepFrames;
+							print("What? It just says *ROCKS*, no duh!!");
+							break;
+						case 575:
+							phaseFrame=currentStepFrames;
+							print("Hehe, ohhh yeah, that's the good stuff!");
+							break;
+						case 627:
+						case 629:
+							phaseFrame=currentStepFrames;
+							print("It says here the ship is... sinking?! I'd better get out of here!");
+							break;
+						case 625:
+							phaseFrame=currentStepFrames;
+							print("Yikes, this thing could tip over at any second!");
+							break;
+						case 631:
+						case 632:
+							phaseFrame=currentStepFrames;
+							print("Is that... slowpoke tail? My my, how SCRUMPTIOUS indeed!");
+							break;
+						case 610:
+						case 611:
+						case 616:
+							player.healTeam();
+							phaseFrame=currentStepFrames;
+							print("Your team was fully healed!");
+							break;
+						case 739:
+							phaseFrame=currentStepFrames;
+							print("Looks like cargo, I wonder what's inside?");
+							break;
+						case 743:
+						case 744:
+							phaseFrame=currentStepFrames;
+							print("You hear a distinct meow, seemingly from deep underground...");
+							break;
+						case 775:
+							phaseFrame=currentStepFrames;
+							print("Looks like a diary... (My oh my, how I'd love to get my teeth back!) Huh, maybe I can help him?");
+							break;
+						case 777:
+						case 778:
+						case 779:
+						case 780:
+							phaseFrame=currentStepFrames;
+							print("Eww, it looks like there's something... sticky in there!");
+							break;
+						default:
+							martItems=pm.getMartItems(playerX, playerY);
+							if(martItems==null)
+							{
+								if(pm.grid[nextY][nextX]==187)
+								{
+									phaseFrame=currentStepFrames;
+									print("Hm, better not touch that...");
+								}
+							}
+							else
+							{
+								pressedKeys.clear();
+								heldDirection=null;
+								buySell=true;
+								strArr[0]="Buy";
+								strArr[1]="Sell";
+								phaseFrame=currentStepFrames;
+								print("Welcome to the mart!");
+							}
 					}
-				}
 			}
 		}
-		else if (canMove(facing)) {
+		else if(canMove(facing)) {
 			offsetX += dx * delta;
 			offsetY += dy * delta;
 		}
@@ -2183,6 +2419,7 @@ public class OverworldGui extends JPanel {
 						}
 						break;
 					case 8:
+						surfing=false;
 						playerX = nextX;
 						playerY = nextY;
 						if(Math.random()<0.1)
@@ -2217,6 +2454,7 @@ public class OverworldGui extends JPanel {
 						}
 						break;
 					case 12:
+						surfing=false;
 						playerX = nextX;
 						playerY = nextY;
 						if(Math.random()<0.1)
