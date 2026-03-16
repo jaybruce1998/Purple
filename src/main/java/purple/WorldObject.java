@@ -12,7 +12,7 @@ Route4;POKE_BALL 57 3,Move=Whirlwind
 Route9;POKE_BALL 10 15,Move=Teleport
 Route12;POKE_BALL 14 35,Move=Pay Day;POKE_BALL 5 89,Iron
 Route24;POKE_BALL 10 5,Move=Thunder Wave
-CeruleanCave2F;POKE_BALL 29 9,Max Elixir;POKE_BALL 4 15,Nugget;POKE_BALL 13 6,Full Restore
+CeruleanCave2F;POKE_BALL 28 9,Max Elixir;POKE_BALL 4 15,Nugget;POKE_BALL 13 6,Full Restore
 CeruleanCave1F;POKE_BALL 7 13,PP Up;POKE_BALL 19 3,Full Restore;POKE_BALL 5 0,Ultra Ball
 MtMoon1F;POKE_BALL 2 20,Potion;POKE_BALL 2 2,Potion;POKE_BALL 35 31,Rare Candy;POKE_BALL 36 23,Escape Rope;POKE_BALL 20 33,Moon Stone;POKE_BALL 5 32,Move=Water Gun
 Museum1F;OLD_AMBER 16 2,Old Amber
@@ -65,7 +65,7 @@ PowerPlant;POKE_BALL 37 32,Pokemon=35 Electrode
 SeafoamIslandsB4F;BIRD 6 1,Pokemon=50 Articuno
 VictoryRoad2F;BIRD 11 5,Pokemon=60 Moltres
 CeruleanCaveB1F;MONSTER 27 13,Pokemon=70 Mewtwo
-RocketHideoutB1F;60 3 1,Pokemon=200 Missingno""".split("\n");
+RocketHideoutB1F;60 3 1,Pokemon=200 Missingno.""".split("\n");
 	static int wid;
 	public static void buildWorldObjects()
 	{
